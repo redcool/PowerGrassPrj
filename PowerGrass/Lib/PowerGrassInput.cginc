@@ -4,17 +4,39 @@
 sampler2D _MainTex;
 sampler2D _SpecMaskMap;
 
-float4 _MainTex_ST;
-float _Cutoff;
-float _ColorScale;
-float _Gloss;
+CBUFFER_START(UnityPerMaterial)
+half4 _MainTex_ST;
+half _Cutoff;
+half _ColorScale;
+half _Gloss;
 int _SpecMaskR;
-float4 _ShadowColor;
+half4 _ShadowColor;
+half _BaseAO;
+// wind
+half _WaveIntensity;
+half _WaveSpeed;
+half _WaveScale;
+
+half4 _WaveColor1,_WaveColor2;
+// interactive
+half _PushRadius;
+half _PushIntensity;
+CBUFFER_END
+
+// ========================= global vars
+
+half3 _PlayerPos;
+half3 _GlobalWindDir;
+half _GlobalWindIntensity;
+
+half3 _CullPos;
+half _CullDistance;
+half _CullInvert;
 
 UNITY_INSTANCING_BUFFER_START(Props)
-    UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
-    //UNITY_DEFINE_INSTANCED_PROP(float4,_PlayerPos)
-    UNITY_DEFINE_INSTANCED_PROP(float4, _LightmapST)
+    UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+    //UNITY_DEFINE_INSTANCED_PROP(half4,_PlayerPos)
+    UNITY_DEFINE_INSTANCED_PROP(half4, _LightmapST)
 UNITY_INSTANCING_BUFFER_END(Props)
 
 #define _Color UNITY_ACCESS_INSTANCED_PROP(Props,_Color)

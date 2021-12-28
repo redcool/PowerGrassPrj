@@ -12,6 +12,11 @@
         [Toggle(ALPHA_TEST)]_CutoffOn("_CutoffOn",float) = 0
         _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
 
+        [Header(Clip Animation)]
+        _CullPos("_CullPos",vector) = (0,0,0,0)
+        _CullDistance("_CullDistance",float) = 5
+        [Toggle]_CullInvert("_CullInvert",float) = 0 
+
         [Header(GrassSpecular)]
         [Toggle(SPEC_ON)]_SpecMaskOn("SpecMask On?",int) = 0
         [Toggle]_SpecMaskR("Spec Mask R?",int) = 0
@@ -22,8 +27,11 @@
         _WaveSpeed("WaveSpeed",float) = 1
         _WaveIntensity("WaveIntensity",float) = 1
         _WaveScale("_WaveScale",float) = 1
-        [Header(Debug)]
-        [Toggle(DEBUG)]_DebugOn("_DebugOn",int) = 0
+
+        [Header(WaveColor)]
+        _WaveColor1("_WaveColor1",color) = (1,1,1,1)
+        _WaveColor2("_WaveColor2",color) = (1,1,1,1)
+        
 
         [Header(Interactive)]
         _PushRadius("Radius",float) = 0.5
@@ -32,6 +40,7 @@
         // _GlobalWindDir("Global WindDir",vector)=(1,0,0,0)
         // _GlobalWindIntensity("Global WindIntensity",float)=1
         // _LightmapST("_LightmapST",Vector)=(0,0,0,0)
+
 
         [Header(Options)]
         [Toggle]_ZWriteMode("_ZWriteMode",int) = 0
@@ -63,7 +72,6 @@
             #pragma multi_compile_instancing
             #pragma multi_compile _ SPEC_ON
             #pragma shader_feature_local_fragment ALPHA_TEST
-            #pragma shader_feature_local_fragment DEBUG
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
