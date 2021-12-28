@@ -3,15 +3,7 @@
 
 #include "Lib/NodeLib.cginc"
 
-struct appdata
-{
-    float4 vertex : POSITION;
-    float2 uv : TEXCOORD0;
-    float2 uv1:TEXCOORD1;
-    float4 color:COLOR;
-    float3 normal:NORMAL;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
-};
+
 float _WaveIntensity;
 float _WaveSpeed;
 float _WaveScale;
@@ -51,7 +43,7 @@ float CalcNoise(float3 pos,float2 vertexUV,float3 vertexColor,float3 vertexPos){
     return noise;
 }
 
-float3 WaveVertex(float3 pos,float2 vertexUV,float3 vertexColor,float3 vertexPos){
+float3 WaveVertex(float3 pos,float3 vertexPos,float2 vertexUV,float3 vertexColor){
     float noise = CalcNoise(pos,vertexUV,vertexColor,vertexPos);
     
     pos.x += noise;
@@ -61,7 +53,7 @@ float3 WaveVertex(float3 pos,float2 vertexUV,float3 vertexColor,float3 vertexPos
     pos.xyz += noise * 0.4 * windDir;
     return pos;
 }
-
+/*
 float4 WaveVertex(appdata v,float waveSpeed,float waveIntensity){
     float4 pos = mul(unity_ObjectToWorld,v.vertex);
 
@@ -84,5 +76,5 @@ float4 WaveVertex(appdata v,float waveSpeed,float waveIntensity){
     //return mul(unity_WorldToObject,pos);
     return pos;
 }
-
+*/
 #endif //POWER_GRASS_CORE_CGINC

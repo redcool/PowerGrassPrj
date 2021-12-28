@@ -62,7 +62,7 @@
             #pragma multi_compile_fwdbase 
             #pragma multi_compile_instancing
             #pragma multi_compile _ SPEC_ON
-            #pragma shader_feature_local ALPHA_TEST
+            #pragma shader_feature_local_fragment ALPHA_TEST
             #pragma shader_feature_local_fragment DEBUG
 
             #include "UnityCG.cginc"
@@ -82,11 +82,14 @@
             #pragma fragment shadowPass_frag
             #pragma multi_compile_shadowcaster
             #pragma multi_compile_instancing  
-            #pragma shader_feature_local ALPHA_TEST
+            
+            #pragma shader_feature_local_fragment ALPHA_TEST
 
             #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+            #include "AutoLight.cginc"
             #include "Lib/PowerGrassCore.cginc"
-            #include "Lib/PowerGrassPass.cginc"
+            #include "Lib/ShadowCasterPass.cginc"
             
             ENDCG
         }

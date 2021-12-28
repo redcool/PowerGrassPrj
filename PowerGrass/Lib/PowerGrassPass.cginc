@@ -1,7 +1,49 @@
 #if !defined(POWER_GRASS_PASS_CGINC)
 #define POWER_GRASS_PASS_CGINC
 
-#include "PowerGrassInput.cginc"
+struct appdata
+{
+    float4 vertex : POSITION;
+    float2 uv : TEXCOORD0;
+    float2 uv1:TEXCOORD1;
+    float4 color:COLOR;
+    float3 normal:NORMAL;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+struct v2f
+{
+    float2 uv : TEXCOORD0;
+    UNITY_FOG_COORDS(1)
+    float4 pos : SV_POSITION;
+    float4 lmap:TEXCOORD2;
+    SHADOW_COORDS(3)
+    float3 diff:TEXCOORD4;
+    float3 normal:TEXCOORD5;
+    float3 worldPos:TEXCOORD6;
+    float3 ambient:TEXCOORD7;
+    
+    UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+sampler2D _MainTex;
+sampler2D _SpecMaskMap;
+
+float4 _MainTex_ST;
+float _Cutoff;
+float _ColorScale;
+float _Gloss;
+int _SpecMaskR;
+float4 _ShadowColor;
+
+UNITY_INSTANCING_BUFFER_START(Props)
+    UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
+    //UNITY_DEFINE_INSTANCED_PROP(float4,_PlayerPos)
+    UNITY_DEFINE_INSTANCED_PROP(float4, _LightmapST)
+UNITY_INSTANCING_BUFFER_END(Props)
+
+#define _Color UNITY_ACCESS_INSTANCED_PROP(Props,_Color)
+#define _LightmapST UNITY_ACCESS_INSTANCED_PROP(Props,_LightmapST)
 
 
 v2f vert (appdata v)
@@ -10,8 +52,9 @@ v2f vert (appdata v)
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-    //o.pos = UnityObjectToClipPos( WaveVertex(v,_WaveSpeed,_WaveIntensity) );
-    float4 worldPos = WaveVertex(v,_WaveSpeed,_WaveIntensity);
+    
+    float4 worldPos = mul(unity_ObjectToWorld,v.vertex);
+    worldPos.xyz = WaveVertex(worldPos,v.vertex,v.uv,v.color);
     o.pos = mul(UNITY_MATRIX_VP,worldPos);
     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
@@ -98,34 +141,4 @@ half4 frag (v2f i) : SV_Target
     return col;
 }
 
-
-//========================================== shadow caster pass
-struct shadowPass_v2f { 
-    V2F_SHADOW_CASTER;
-    float2 uv : TEXCOORD1;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
-v2f shadowPass_vert(appdata v)
-{
-    v2f o = (v2f)0;
-    UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_TRANSFER_INSTANCE_ID(v, o);
-    
-    o.pos = UnityWorldToClipPos( WaveVertex(v,_WaveSpeed,_WaveIntensity) );
-    o.uv = v.uv;
-    return o;
-}
-
-float4 shadowPass_frag(v2f i) : SV_Target
-{
-    half4 col = tex2D(_MainTex, i.uv);
-
-    #if defined(ALPHA_TEST)
-    clip(col.a- _Cutoff);
-    #endif
-
-    SHADOW_CASTER_FRAGMENT(i)
-    
-}
 #endif //POWER_GRASS_PASS_CGINC
