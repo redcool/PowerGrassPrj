@@ -52,6 +52,11 @@ v2f vert (appdata v)
     UNITY_TRANSFER_FOG(o,o.pos);
 
     half3 normal = UnityObjectToWorldNormal(v.normal);
+    half3 tangent = UnityObjectToWorldDir(v.tangent.xyz);
+    half3 binormal = cross(normal,tangent) * v.tangent.w;
+    o.tSpace0 = half4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
+    o.tSpace1 = half4(tangent.y,binormal.y,normal.y,worldPosNoise.y);
+    o.tSpace2 = half4(tangent.z,binormal.z,normal.z,worldPosNoise.z);
 
     half3 lightDir = dot(_WorldSpaceLightPos0.xyz,_WorldSpaceLightPos0.xyz) > 0 ? _WorldSpaceLightPos0.xyz : half3(0.1,.35,0.02);
     half nl = dot(normal,lightDir) * 0.5 + 0.5;
@@ -87,7 +92,6 @@ half4 frag (v2f i) : SV_Target
         half cullDistance = CalcCullDistance(worldPos);
         clip(cullDistance);
     #endif
-
     col *= _ColorScale * lerp(_WaveColor1,_WaveColor2,noise);
     
     // ao 
