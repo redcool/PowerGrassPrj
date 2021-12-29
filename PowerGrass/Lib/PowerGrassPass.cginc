@@ -20,9 +20,10 @@ struct v2f
     SHADOW_COORDS(2)
     half3 diff:TEXCOORD3;
     half4 vertexLightNoise:TEXCOORD4;
-    half4 tSpace0:TEXCOORD5;
-    half4 tSpace1:TEXCOORD6;
-    half4 tSpace2:TEXCOORD7;
+    half4 worldPos:TEXCOORD5;
+    // half4 tSpace0:TEXCOORD5;
+    // half4 tSpace1:TEXCOORD6;
+    // half4 tSpace2:TEXCOORD7;
     
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -38,6 +39,7 @@ v2f vert (appdata v)
     half4 worldPos = mul(unity_ObjectToWorld,v.vertex);
     half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.uv,v.color);
 
+    o.worldPos.xyz = worldPosNoise.xyz;
     o.vertexLightNoise.w = worldPosNoise.w;
     o.pos = mul(UNITY_MATRIX_VP,half4(worldPosNoise.xyz,1));
     o.uvLightmapUV.xy = TRANSFORM_TEX(v.uv, _MainTex);
@@ -52,11 +54,11 @@ v2f vert (appdata v)
     UNITY_TRANSFER_FOG(o,o.pos);
 
     half3 normal = UnityObjectToWorldNormal(v.normal);
-    half3 tangent = UnityObjectToWorldDir(v.tangent.xyz);
-    half3 binormal = cross(normal,tangent) * v.tangent.w;
-    o.tSpace0 = half4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
-    o.tSpace1 = half4(tangent.y,binormal.y,normal.y,worldPosNoise.y);
-    o.tSpace2 = half4(tangent.z,binormal.z,normal.z,worldPosNoise.z);
+    // half3 tangent = 0;//UnityObjectToWorldDir(v.tangent.xyz);
+    // half3 binormal = 0;//cross(normal,tangent) * v.tangent.w;
+    // o.tSpace0 = half4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
+    // o.tSpace1 = half4(tangent.y,binormal.y,normal.y,worldPosNoise.y);
+    // o.tSpace2 = half4(tangent.z,binormal.z,normal.z,worldPosNoise.z);
 
     half3 lightDir = dot(_WorldSpaceLightPos0.xyz,_WorldSpaceLightPos0.xyz) > 0 ? _WorldSpaceLightPos0.xyz : half3(0.1,.35,0.02);
     half nl = dot(normal,lightDir) * 0.5 + 0.5;
@@ -72,15 +74,15 @@ half4 frag (v2f i) : SV_Target
 
     half2 uv = i.uvLightmapUV.xy;
     half2 lightmapUV = i.uvLightmapUV.zw;
-    half3 worldPos = half3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
+    half3 worldPos = i.worldPos.xyz;//half3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
     half noise = i.vertexLightNoise.w;
     half3 sh = i.vertexLightNoise.xyz;
     half4 col = tex2D(_MainTex, uv) * _Color ;
 
     #if defined(ALPHA_TEST)
-        clip(col.a - _Cutoff);
+        half alphaCull = col.a - _Cutoff;
         half cullDistance = CalcCullDistance(worldPos);
-        clip(cullDistance);
+        clip(alphaCull*cullDistance);
     #endif
     col *= _ColorScale * lerp(_WaveColor1,_WaveColor2,noise);
     

@@ -63,9 +63,9 @@ Material:
     - _BaseAO: 2
     - _BumpScale: 1
     - _ColorScale: 1.17
-    - _CullDistance: 91.5
+    - _CullDistance: 100
     - _CullInvert: 1
-    - _Cutoff: 0.486
+    - _Cutoff: 0.62
     - _CutoffOn: 1
     - _DebugOn: 1
     - _DetailNormalMapScale: 1
@@ -80,8 +80,8 @@ Material:
     - _Mode: 3
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PushIntensity: 150.16
-    - _PushRadius: 3.83
+    - _PushIntensity: 157.57
+    - _PushRadius: 2.9
     - _SmoothnessTextureChannel: 0
     - _SpecMaskOn: 0
     - _SpecMaskR: 0
@@ -90,19 +90,19 @@ Material:
     - _SrcMode: 1
     - _UVSec: 0
     - _WaveIntensity: 1
-    - _WaveScale: 1
-    - _WaveSpeed: 10
+    - _WaveScale: 2.05
+    - _WaveSpeed: 10.9
     - _ZTestMode: 4
     - _ZWrite: 0
     - _ZWriteMode: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _CullPos: {r: 255.53801, g: 20.3617, b: 393.71738, a: 0}
+    - _CullPos: {r: 298.93835, g: 20.94939, b: 391.72842, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GlobalWindDir: {r: 1, g: 0, b: 0, a: 0}
     - _LightmapST: {r: 0, g: 0, b: 0, a: 0}
     - _PlayerPos: {r: 275.314, g: 2.73, b: 381, a: 0}
     - _ShadowColor: {r: 1, g: 1, b: 1, a: 1}
     - _WaveColor1: {r: 1, g: 1, b: 1, a: 1}
-    - _WaveColor2: {r: 0.8207547, g: 0.8207547, b: 0.8207547, a: 1}
+    - _WaveColor2: {r: 0.7075472, g: 0.69753474, b: 0.69753474, a: 1}
   m_BuildTextureStacks: []
