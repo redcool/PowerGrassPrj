@@ -10,7 +10,7 @@ public class SendPlayerPos : MonoBehaviour
     Rigidbody r;
 
     public Material grassMat;
-    public bool canPlayCullAnim = true;
+    public bool controlCullingAnim = true;
     public float cullDistance = 10;
 
     // Start is called before the first frame update
@@ -39,7 +39,10 @@ public class SendPlayerPos : MonoBehaviour
 
         Shader.SetGlobalVector("_PlayerPos", transform.position);
 
-        grassMat.SetVector("_CullPos", transform.position);
-        grassMat.SetFloat("_CullDistance",cullDistance);
+        if (controlCullingAnim)
+        {
+            grassMat.SetVector("_CullPos", transform.position);
+            grassMat.SetFloat("_CullDistance", cullDistance);
+        }
     }
 }

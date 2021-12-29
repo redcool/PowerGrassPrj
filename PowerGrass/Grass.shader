@@ -6,7 +6,10 @@
         _Color("Color",color) = (1,1,1,1)
         _ColorScale("ColorScale",range(0,3)) = 1
         _BaseAO("Base Ao",range(0,2)) = 1
-        _ShadowColor("ShadowColor",color) = (1,1,1,1)
+
+        [Header(Normal)]
+        [Toggle(NORMAL_MAP_ON)]_NormalMapOn("_NormalMapOn",int) = 0
+        _NormalMap("_NormalMap",2d) = ""{}
 
         [Header(Clip)]
         [Toggle(ALPHA_TEST)]_CutoffOn("_CutoffOn",float) = 0
@@ -18,10 +21,9 @@
         [Toggle]_CullInvert("_CullInvert",float) = 0 
 
         [Header(GrassSpecular)]
-        [Toggle(SPEC_ON)]_SpecMaskOn("SpecMask On?",int) = 0
-        [Toggle]_SpecMaskR("Spec Mask R?",int) = 0
-        _SpecMaskMap("SpecMaskMap",2d) = "White"{}
-        _Gloss("_Gloss",range(0,1)) = 0
+        [Toggle(SPEC_ON)]_SpecularkOn("Specular On?",int) = 0
+        _Metallic("_Metallic",range(0,1)) = 0.5
+        _Smoothness("Smoothness",range(0,1)) = 0.5
 
         [Header(Wind)]
         _WaveSpeed("WaveSpeed",float) = 1
@@ -72,6 +74,7 @@
             #pragma multi_compile_instancing
             #pragma multi_compile _ SPEC_ON
             #pragma shader_feature_local_fragment ALPHA_TEST
+            #pragma shader_feature_local NORMAL_MAP_ON
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"

@@ -1,5 +1,6 @@
 #if !defined(POWER_GRASS_PASS_CGINC)
 #define POWER_GRASS_PASS_CGINC
+#include "Lib/BSDF.hlsl"
 
 struct appdata
 {
@@ -52,6 +53,11 @@ v2f vert (appdata v)
     UNITY_TRANSFER_FOG(o,o.pos);
 
     half3 normal = UnityObjectToWorldNormal(v.normal);
+    half3 tangent = UnityObjectToWorldDir(v.tangent.xyz);
+    half3 binormal = cross(normal,tangent) * v.tangent.w;
+    o.tSpace0 = half4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
+    o.tSpace1 = half4(tangent.y,binormal.y,normal.y,worldPosNoise.y);
+    o.tSpace2 = half4(tangent.z,binormal.z,normal.z,worldPosNoise.z);
 
     half3 lightDir = dot(_WorldSpaceLightPos0.xyz,_WorldSpaceLightPos0.xyz) > 0 ? _WorldSpaceLightPos0.xyz : half3(0.1,.35,0.02);
     half nl = dot(normal,lightDir) * 0.5 + 0.5;
@@ -80,28 +86,69 @@ half4 frag (v2f i) : SV_Target
     half noise = i.vertexLightNoise.w;
     half3 sh = i.vertexLightNoise.xyz;
 
-    half4 col = tex2D(_MainTex, uv) * _Color ;
+    half metallic = _Metallic;
+    half roughness = 1 - _Smoothness;
+
+    half3 normal = half3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z);
+    // #if defined(NORMAL_MAP_ON)
+        half3 normalTS = UnpackNormal(tex2D(_NormalMap,uv));
+        normal = half3(
+            dot(i.tSpace0.xyz,normalTS),
+            dot(i.tSpace1.xyz,normalTS),
+            dot(i.tSpace2.xyz,normalTS)
+        );
+        // return normal.xyzx;
+    // #endif
+    half3 lightDir = UnityWorldSpaceLightDir(worldPos);
+    half nl = saturate(dot(lightDir,normal) * 0.5+0.5);
+
+    // sample the texture
+    half4 mainTex = tex2D(_MainTex, uv) * _Color ;
+    half3 albedo = mainTex.xyz;
+    half alpha = mainTex.w;
 
     #if defined(ALPHA_TEST)
-        clip(col.a - _Cutoff);
+        clip(alpha - _Cutoff);
         half cullDistance = CalcCullDistance(worldPos);
         clip(cullDistance);
     #endif
 
-    col *= _ColorScale * lerp(_WaveColor1,_WaveColor2,noise);
-    
-    // ao 
-    half atten = SHADOW_ATTENUATION(i);
+    half shadowAtten = SHADOW_ATTENUATION(i);
 
-    half4 attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
-    col.rgb *= i.diff * attenColor + sh;
+
+    half3 attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,shadowAtten);
+    
+    half3 diffColor = albedo * ( 1- metallic) * _ColorScale * i.diff * attenColor * lerp(_WaveColor1,_WaveColor2,noise);
+    half3 specColor = lerp(0.04,albedo,metallic);
 
     #if defined(LIGHTMAP_ON)
-        half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.lmap.xy);
+        half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, lightmapUV);
         half3 bakedColor = DecodeLightmap(bakedColorTex);
-//return half4(bakedColor,1);
-        col.rgb *= bakedColor;
+        diffColor *= bakedColor;
     #endif
+    
+    half4 col = 0;
+    half3 giDiff = sh * diffColor;
+    col.rgb += giDiff;
+
+    half specTerm = 0;
+    //Specular
+    #if defined(SPEC_ON)
+        half3 n = normalize(normal);
+        half3 v = normalize(UnityWorldSpaceViewDir(worldPos));
+        half3 h = normalize(lightDir+v);
+        half nh = saturate(dot(n,h));
+        half lh = saturate(dot(lightDir,h));
+
+        half a = roughness * roughness;
+        half a2 = max(0.00001,a*a);
+        // half surfaceReduction = 1/(a2+1);
+        // half grazingTerm = saturate(smoothness + metallic);
+        specTerm = MinimalistCookTorrance(lh,nh,a,a2);
+    #endif
+
+    half radiance = shadowAtten * nl;
+    col.rgb += (diffColor + specColor * specTerm) * radiance;
 
     // apply fog
     UNITY_APPLY_FOG(i.fogCoord, col);

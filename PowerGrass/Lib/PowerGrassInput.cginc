@@ -3,15 +3,14 @@
 
 sampler2D _MainTex;
 sampler2D _SpecMaskMap;
+sampler2D _NormalMap;
 
 CBUFFER_START(UnityPerMaterial)
 half4 _MainTex_ST;
 half _Cutoff;
 half _ColorScale;
-half _Gloss;
-int _SpecMaskR;
-half4 _ShadowColor;
 half _BaseAO;
+half _Metallic,_Smoothness;
 // wind
 half _WaveIntensity;
 half _WaveSpeed;

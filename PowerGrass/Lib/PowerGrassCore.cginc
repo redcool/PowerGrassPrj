@@ -8,11 +8,14 @@
 half3 CalcForce(half3 pos,half2 uv,half3 color){
     //---interactive
     half3 dir = pos - _PlayerPos;
-    half dist2 = dot(dir,dir);
-    half distAtten = (_PushRadius * _PushRadius - dist2);
+    dir.y = 0;
+    // half dist2 = dot(dir,dir);
+    // half distAtten = (_PushRadius * _PushRadius - dist2);
+    half dist = length(dir);
+    half distAtten = _PushRadius - dist;
+
     half atten = uv.y * distAtten * color * _PushIntensity;
 
-    
     dir.xz = normalize(dir.xz);
     dir.y = -0.5;
     return dir * saturate(atten);
