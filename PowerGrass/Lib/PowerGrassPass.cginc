@@ -62,16 +62,7 @@ v2f vert (appdata v)
     half nl = dot(normal,lightDir) * 0.5 + 0.5;
     o.diff = nl * _LightColor0.rgb;//smoothstep(0,.32,nl);
 
-    // ambient light
-    o.vertexLightNoise = 0;
-    // #if defined(VERTEXLIGHT_ON)
-    //     o.vertexLightNoise.xyz +=  Shade4PointLights (
-    //     unity_4LightPosX0, unity_4LightPosY0, unity_4LightPosZ0,
-    //     unity_LightColor[0].rgb, unity_LightColor[1].rgb, unity_LightColor[2].rgb, unity_LightColor[3].rgb,
-    //     unity_4LightAtten0, worldPos.xyz, normal);
-    // #else
-        o.vertexLightNoise.xyz += ShadeSH9(half4(normal,1));
-    // #endif
+    o.vertexLightNoise.xyz += ShadeSH9(half4(normal,1));
     return o;
 }
 
@@ -84,7 +75,6 @@ half4 frag (v2f i) : SV_Target
     half3 worldPos = half3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
     half noise = i.vertexLightNoise.w;
     half3 sh = i.vertexLightNoise.xyz;
-
     half4 col = tex2D(_MainTex, uv) * _Color ;
 
     #if defined(ALPHA_TEST)
