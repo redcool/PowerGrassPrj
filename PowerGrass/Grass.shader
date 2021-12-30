@@ -50,22 +50,44 @@
 
         Pass
         {
+            Tags {"Queue"="AlphaTest"}
+            zwrite on
+            colorMask 0
+
+            CGPROGRAM
+            #pragma vertex shadowPass_vert
+            #pragma fragment shadowPass_frag
+            #pragma multi_compile_instancing  
+            
+            #pragma shader_feature_local_fragment ALPHA_TEST
+
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+            #include "AutoLight.cginc"
+            #include "Lib/PowerGrassCore.cginc"
+            #include "Lib/ShadowCasterPass.cginc"
+            
+            ENDCG
+        }
+
+        Pass
+        {
             Tags {"Queue"="AlphaTest" "LightMode"="ForwardBase"}
-            zwrite[_ZWriteMode]
-            blend [_SrcMode][_DstMode]
-            ztest [_ZTestMode]
+            // zwrite[_ZWriteMode]
+            // blend [_SrcMode][_DstMode]
+            // ztest [_ZTestMode]
+            ztest equal
+            zwrite off
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
-            // #pragma multi_compile_fog
+            #pragma multi_compile_fog
             //#pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile_fwdbase 
             #pragma multi_compile_instancing
-            #pragma multi_compile _ SPEC_ON
-            #pragma shader_feature_local_fragment ALPHA_TEST
-            #pragma shader_feature_local NORMAL_MAP_ON
+            // #pragma shader_feature_local_fragment ALPHA_TEST
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"

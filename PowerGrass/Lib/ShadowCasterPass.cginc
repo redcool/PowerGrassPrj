@@ -36,13 +36,11 @@ half4 shadowPass_frag(shadowPass_v2f i) : SV_Target
     half4 col = tex2D(_MainTex, i.uv);
 
     #if defined(ALPHA_TEST)
-        clip(col.a- _Cutoff);
-        half3 worldPos = i.worldPosNoise.xyz;
-        half cullDistance = CalcCullDistance(worldPos);
-        clip(cullDistance);
+        half alphaCull = col.a - _Cutoff;
+        half cullDistance = CalcCullDistance(i.worldPosNoise.xyz);
+        clip(alphaCull*cullDistance);
     #endif
 
     SHADOW_CASTER_FRAGMENT(i)
-    
 }
 #endif //SHADOW_CASTER_PASS_CGINC
