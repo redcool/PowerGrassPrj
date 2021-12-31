@@ -8,12 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 01 - Default clip
-  m_Shader: {fileID: 4800000, guid: 04eae93385ff460439ffc48e9a04a5a7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 727431fe7cd78034093937508f527186, type: 3}
   m_ShaderKeywords: ALPHA_TEST DEBUG _CULLINVERT_ON _ZWRITEMODE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -62,7 +62,7 @@ Material:
     m_Floats:
     - _BaseAO: 2
     - _BumpScale: 1
-    - _ColorScale: 1.17
+    - _ColorScale: 3
     - _CullDistance: 100
     - _CullInvert: 1
     - _Cutoff: 0.62

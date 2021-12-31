@@ -24,7 +24,7 @@ shadowPass_v2f shadowPass_vert(appdata v)
     UNITY_TRANSFER_INSTANCE_ID(v, o);
     
     half4 worldPos = mul(unity_ObjectToWorld,v.vertex);
-    half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.uv,v.color);
+    half4 worldPosNoise = worldPos;//WaveVertex(worldPos,v.vertex,v.uv,v.color);
     o.pos = UnityWorldToClipPos(half4(worldPosNoise.xyz,1));
     o.uv = v.uv;
     o.worldPosNoise = worldPosNoise;
@@ -33,12 +33,11 @@ shadowPass_v2f shadowPass_vert(appdata v)
 
 half4 shadowPass_frag(shadowPass_v2f i) : SV_Target
 {
-    half4 col = tex2D(_MainTex, i.uv);
-
     #if defined(ALPHA_TEST)
+        half4 col = tex2D(_MainTex, i.uv);
         half alphaCull = col.a - _Cutoff;
         half cullDistance = CalcCullDistance(i.worldPosNoise.xyz);
-        clip(alphaCull*cullDistance);
+        clip( min(alphaCull,cullDistance));
     #endif
 
     SHADOW_CASTER_FRAGMENT(i)

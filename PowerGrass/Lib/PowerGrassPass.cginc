@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 #if !defined(POWER_GRASS_PASS_CGINC)
 #define POWER_GRASS_PASS_CGINC
 
@@ -35,14 +37,13 @@ v2f vert (appdata v)
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-    
     half4 worldPos = mul(unity_ObjectToWorld,v.vertex);
     half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.uv,v.color);
+    o.pos = mul(UNITY_MATRIX_VP,half4(worldPosNoise.xyz,1));
+    o.uvLightmapUV.xy = TRANSFORM_TEX(v.uv, _MainTex);
 
     o.worldPos.xyz = worldPosNoise.xyz;
     o.vertexLightNoise.w = worldPosNoise.w;
-    o.pos = mul(UNITY_MATRIX_VP,half4(worldPosNoise.xyz,1));
-    o.uvLightmapUV.xy = TRANSFORM_TEX(v.uv, _MainTex);
 
     #if defined(LIGHTMAP_ON)
         // half4 lightmapST = UNITY_ACCESS_INSTANCED_PROP(Props,_LightmapST);
@@ -53,18 +54,21 @@ v2f vert (appdata v)
     TRANSFER_SHADOW(o)
     UNITY_TRANSFER_FOG(o,o.pos);
 
-    half3 normal = UnityObjectToWorldNormal(v.normal);
+    half3 normal = (UnityObjectToWorldNormal(v.normal));
     // half3 tangent = 0;//UnityObjectToWorldDir(v.tangent.xyz);
     // half3 binormal = 0;//cross(normal,tangent) * v.tangent.w;
     // o.tSpace0 = half4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
     // o.tSpace1 = half4(tangent.y,binormal.y,normal.y,worldPosNoise.y);
     // o.tSpace2 = half4(tangent.z,binormal.z,normal.z,worldPosNoise.z);
 
-    half3 lightDir = dot(_WorldSpaceLightPos0.xyz,_WorldSpaceLightPos0.xyz) > 0 ? _WorldSpaceLightPos0.xyz : half3(0.1,.35,0.02);
-    half nl = dot(normal,lightDir) * 0.5 + 0.5;
-    o.diff = nl * _LightColor0.rgb;//smoothstep(0,.32,nl);
+    // half3 lightDir = dot(_WorldSpaceLightPos0.xyz,_WorldSpaceLightPos0.xyz) > 0 ? _WorldSpaceLightPos0.xyz : half3(0.1,.35,0.02);
+    half3 lightDir = (_WorldSpaceLightPos0.xyz);
+    half nl = saturate(dot(normal,lightDir) * 0.5 + 0.65);
 
-    o.vertexLightNoise.xyz += ShadeSH9(half4(normal,1));
+    o.diff = (nl * _ColorScale) * _LightColor0.rgb;
+    o.diff *= _Color * lerp(_WaveColor1,_WaveColor2,worldPosNoise.w);
+
+    o.vertexLightNoise.xyz = ShadeSH9(half4(normal,1));
     return o;
 }
 
@@ -73,29 +77,32 @@ half4 frag (v2f i) : SV_Target
     UNITY_SETUP_INSTANCE_ID(i);
 
     half2 uv = i.uvLightmapUV.xy;
+    half4 col = tex2D(_MainTex, uv);
+
     half2 lightmapUV = i.uvLightmapUV.zw;
     half3 worldPos = i.worldPos.xyz;//half3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
     half noise = i.vertexLightNoise.w;
     half3 sh = i.vertexLightNoise.xyz;
-    half4 col = tex2D(_MainTex, uv) * _Color ;
 
     #if defined(ALPHA_TEST)
         half alphaCull = col.a - _Cutoff;
         half cullDistance = CalcCullDistance(worldPos);
-        clip(alphaCull*cullDistance);
+        clip( min(alphaCull,cullDistance));
     #endif
-    col *= _ColorScale * lerp(_WaveColor1,_WaveColor2,noise);
-    
-    // ao 
-    half atten = SHADOW_ATTENUATION(i);
 
-    half4 attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
-    col.rgb *= i.diff * attenColor + sh;
+    // shadow atten
+    #if defined (SHADOWS_SCREEN)
+        half atten = SHADOW_ATTENUATION(i);
+        half attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
+        col.rgb *= i.diff * attenColor + sh;
+    #else
+        col.rgb *= i.diff+sh;
+    #endif
+
 
     #if defined(LIGHTMAP_ON)
         half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.lmap.xy);
         half3 bakedColor = DecodeLightmap(bakedColorTex);
-//return half4(bakedColor,1);
         col.rgb *= bakedColor;
     #endif
 

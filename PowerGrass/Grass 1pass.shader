@@ -1,4 +1,4 @@
-﻿Shader "Nature/Grass"
+﻿Shader "Nature/Grass 1Pass"
 {
     Properties
     {
@@ -7,23 +7,15 @@
         _ColorScale("ColorScale",range(0,3)) = 1
         _BaseAO("Base Ao",range(0,2)) = 1
 
-        [Header(Normal)]
-        [Toggle(NORMAL_MAP_ON)]_NormalMapOn("_NormalMapOn",int) = 0
-        _NormalMap("_NormalMap",2d) = ""{}
-
         [Header(Clip)]
         [Toggle(ALPHA_TEST)]_CutoffOn("_CutoffOn",float) = 0
         _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
 
         [Header(Clip Animation)]
+        // [Toggle(CULL_ANIM)]_CullAnim("_CullAnim",float) = 0
         _CullPos("_CullPos",vector) = (0,0,0,0)
         _CullDistance("_CullDistance",float) = 5
         [Toggle]_CullInvert("_CullInvert",float) = 0 
-
-        [Header(GrassSpecular)]
-        [Toggle(SPEC_ON)]_SpecularkOn("Specular On?",int) = 0
-        _Metallic("_Metallic",range(0,1)) = 0.5
-        _Smoothness("Smoothness",range(0,1)) = 0.5
 
         [Header(Wind)]
         _WaveSpeed("WaveSpeed",float) = 1
@@ -57,24 +49,46 @@
         LOD 100
         cull off
 
+        // Pass
+        // {
+        //     Tags {"Queue"="AlphaTest"}
+        //     zwrite on
+        //     colorMask 0
+
+        //     CGPROGRAM
+        //     #pragma vertex shadowPass_vert
+        //     #pragma fragment shadowPass_frag
+        //     #pragma multi_compile_instancing  
+            
+        //     #pragma shader_feature_local_fragment ALPHA_TEST
+
+        //     #include "UnityCG.cginc"
+        //     #include "Lighting.cginc"
+        //     #include "AutoLight.cginc"
+        //     #include "Lib/PowerGrassCore.cginc"
+        //     #include "Lib/ShadowCasterPass.cginc"
+            
+        //     ENDCG
+        // }
+
         Pass
         {
             Tags {"Queue"="AlphaTest" "LightMode"="ForwardBase"}
-            zwrite[_ZWriteMode]
-            blend [_SrcMode][_DstMode]
-            ztest [_ZTestMode]
+            // zwrite[_ZWriteMode]
+            // blend [_SrcMode][_DstMode]
+            // ztest [_ZTestMode]
+            // ztest equal
+            // zwrite off
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
-            // #pragma multi_compile_fog
+            #pragma multi_compile_fog
             //#pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile_fwdbase 
             #pragma multi_compile_instancing
-            #pragma multi_compile _ SPEC_ON
             #pragma shader_feature_local_fragment ALPHA_TEST
-            #pragma shader_feature_local NORMAL_MAP_ON
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
