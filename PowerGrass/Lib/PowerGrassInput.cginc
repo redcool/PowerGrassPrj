@@ -28,6 +28,7 @@ half3 _PlayerPos;
 half3 _GlobalWindDir;
 half _GlobalWindIntensity;
 
+half _CullAnimOn;
 half3 _CullPos;
 half _CullDistance;
 half _CullInvert;

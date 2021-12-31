@@ -36,7 +36,10 @@ half4 shadowPass_frag(shadowPass_v2f i) : SV_Target
     #if defined(ALPHA_TEST)
         half4 col = tex2D(_MainTex, i.uv);
         half alphaCull = col.a - _Cutoff;
-        half cullDistance = CalcCullDistance(i.worldPosNoise.xyz);
+        half cullDistance = 0;
+        if(_CullAnimOn)
+            cullDistance = CalcCullDistance(i.worldPosNoise.xyz);
+            
         clip( min(alphaCull,cullDistance));
     #endif
 

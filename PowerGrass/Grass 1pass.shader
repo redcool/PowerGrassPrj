@@ -12,7 +12,7 @@
         _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
 
         [Header(Clip Animation)]
-        // [Toggle(CULL_ANIM)]_CullAnim("_CullAnim",float) = 0
+        [Toggle(CULL_ANIM)]_CullAnimOn("_CullAnimOn",float) = 0
         _CullPos("_CullPos",vector) = (0,0,0,0)
         _CullDistance("_CullDistance",float) = 5
         [Toggle]_CullInvert("_CullInvert",float) = 0 
@@ -23,8 +23,8 @@
         _WaveScale("_WaveScale",float) = 1
 
         [Header(WaveColor)]
-        _WaveColor1("_WaveColor1",color) = (1,1,1,1)
-        _WaveColor2("_WaveColor2",color) = (1,1,1,1)
+        [hdr]_WaveColor1("_WaveColor1",color) = (1,1,1,1)
+        [hdr]_WaveColor2("_WaveColor2",color) = (1,1,1,1)
         
 
         [Header(Interactive)]

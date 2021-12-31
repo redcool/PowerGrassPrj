@@ -43,7 +43,7 @@ v2f vert (appdata v)
     o.uvLightmapUV.xy = TRANSFORM_TEX(v.uv, _MainTex);
 
     o.worldPos.xyz = worldPosNoise.xyz;
-    o.vertexLightNoise.w = worldPosNoise.w;
+    o.vertexLightNoise.w = saturate(worldPosNoise.w);
 
     #if defined(LIGHTMAP_ON)
         // half4 lightmapST = UNITY_ACCESS_INSTANCED_PROP(Props,_LightmapST);
@@ -86,7 +86,10 @@ half4 frag (v2f i) : SV_Target
 
     #if defined(ALPHA_TEST)
         half alphaCull = col.a - _Cutoff;
-        half cullDistance = CalcCullDistance(worldPos);
+        half cullDistance = 0;
+        if(_CullAnimOn)
+            cullDistance = CalcCullDistance(worldPos);
+
         clip( min(alphaCull,cullDistance));
     #endif
 
