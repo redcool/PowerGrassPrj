@@ -62,7 +62,7 @@ Material:
     m_Floats:
     - _BaseAO: 2
     - _BumpScale: 1
-    - _ColorScale: 2.34
+    - _ColorScale: 2
     - _CullAnim: 1
     - _CullAnimOn: 1
     - _CullDistance: 100
@@ -91,9 +91,9 @@ Material:
     - _SrcBlend: 1
     - _SrcMode: 1
     - _UVSec: 0
-    - _WaveIntensity: 1
-    - _WaveScale: 2.05
-    - _WaveSpeed: 10.9
+    - _WaveIntensity: 2.59
+    - _WaveScale: 10.3
+    - _WaveSpeed: 4.5
     - _ZTestMode: 4
     - _ZWrite: 0
     - _ZWriteMode: 1
@@ -106,5 +106,5 @@ Material:
     - _PlayerPos: {r: 275.314, g: 2.73, b: 381, a: 0}
     - _ShadowColor: {r: 1, g: 1, b: 1, a: 1}
     - _WaveColor1: {r: 1, g: 1, b: 1, a: 1}
-    - _WaveColor2: {r: 0.7075472, g: 0.69753474, b: 0.69753474, a: 1}
+    - _WaveColor2: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
   m_BuildTextureStacks: []
