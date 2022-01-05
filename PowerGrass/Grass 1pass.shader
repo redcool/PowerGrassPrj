@@ -28,6 +28,7 @@
         
 
         [Header(Interactive)]
+        [Toggle]_InteractiveOn("_InteractiveOn",int) = 0
         _PushRadius("Radius",float) = 0.5
         _PushIntensity("Push Intensity",float) = 1
         //_PlayerPos("playerPos",vector) = (0,0,0,0)

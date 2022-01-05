@@ -18,6 +18,7 @@ half _WaveScale;
 
 half4 _WaveColor1,_WaveColor2;
 // interactive
+half _InteractiveOn;
 half _PushRadius;
 half _PushIntensity;
 CBUFFER_END

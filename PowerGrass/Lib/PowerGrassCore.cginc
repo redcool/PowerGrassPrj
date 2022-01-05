@@ -40,7 +40,10 @@ half4 WaveVertex(half4 pos,half3 vertexPos,half2 vertexUV,half3 vertexColor){
     pos.w = noise;
 
     pos.x += noise;
-    pos.xyz += CalcForce(pos.xyz,vertexUV,vertexColor);
+
+    if(_InteractiveOn)
+        pos.xyz += CalcForce(pos.xyz,vertexUV,vertexColor);
+
     //apply weather
     half3 windDir = _GlobalWindDir * _GlobalWindIntensity;
     pos.xyz += noise * 0.4 * windDir;
