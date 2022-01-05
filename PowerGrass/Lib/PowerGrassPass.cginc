@@ -104,7 +104,7 @@ half4 frag (v2f i) : SV_Target
 
 
     #if defined(LIGHTMAP_ON)
-        half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.lmap.xy);
+        half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.uvLightmapUV.zw);
         half3 bakedColor = DecodeLightmap(bakedColorTex);
         col.rgb *= bakedColor;
     #endif
