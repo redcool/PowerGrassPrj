@@ -23,13 +23,14 @@ shadowPass_v2f shadowPass_vert(appdata_full v)
     
     half4 worldPos = mul(unity_ObjectToWorld,v.vertex);
     half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.texcoord,v.color);
-    half3 worldNormal = UnityObjectToWorldNormal(v.normal);
-    o.pos = UnityWorldToClipPos(ApplyShadowBias(worldPosNoise.xyz,worldNormal,_LightDirection));
-    #if UNITY_REVERSED_Z
-        o.pos.z = min(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
-    #else
-        o.pos.z = max(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
-    #endif
+    o.pos = UnityWorldToClipPos(half4(worldPosNoise.xyz,1));
+    // half3 worldNormal = UnityObjectToWorldNormal(v.normal);
+    // o.pos = UnityWorldToClipPos(ApplyShadowBias(worldPosNoise.xyz,worldNormal,_LightDirection));
+    // #if UNITY_REVERSED_Z
+    //     o.pos.z = min(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+    // #else
+    //     o.pos.z = max(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+    // #endif
 
     o.uv = v.texcoord;
     o.worldPosNoise = worldPosNoise;
