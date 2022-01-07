@@ -20,7 +20,7 @@ MonoBehaviour:
   forceRefresh: 0
   groupList:
   - mesh: {fileID: -7002830064322448097, guid: fbfa92baff35fea46b9c6a1a798c2199, type: 3}
-    mat: {fileID: 2100000, guid: 7143dbda992afbc4e9ca9a15e8cfd017, type: 2}
+    mat: {fileID: 2100000, guid: 954db1ebf46346d4e8bf853dd46f8551, type: 2}
     originalTransformsGroupList:
     - transforms:
       - e00: 1.1077063

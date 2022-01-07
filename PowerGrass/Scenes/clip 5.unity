@@ -393,7 +393,7 @@ Terrain:
   m_DrawInstanced: 1
   m_DrawTreesAndFoliage: 1
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_MaterialTemplate: {fileID: 2100000, guid: b0d5490a1166b5145b5f61424fdf200b, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -567,7 +567,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195183930}
-  m_LocalRotation: {x: 0.3826835, y: 0.000000015896626, z: -0.0000000065845986, w: 0.92387956}
+  m_LocalRotation: {x: 0.3826835, y: -0.00000001589662, z: 0.000000006584596, w: 0.9238795}
   m_LocalPosition: {x: 286.99, y: 37.760002, z: 384.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -899,7 +899,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884831157}
-  m_LocalRotation: {x: 0.3826835, y: 0.000000015896626, z: -0.0000000065845986, w: 0.92387956}
+  m_LocalRotation: {x: 0.3826835, y: -0.00000001589662, z: 0.000000006584596, w: 0.9238795}
   m_LocalPosition: {x: 286.99, y: 37.760002, z: 384.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

@@ -1,5 +1,6 @@
 #if !defined(POWER_GRASS_INPUT_CGINC)
 #define POWER_GRASS_INPUT_CGINC
+#include "Common.hlsl"
 
 sampler2D _MainTex;
 sampler2D _SpecMaskMap;
@@ -21,6 +22,11 @@ half4 _WaveColor1,_WaveColor2;
 half _InteractiveOn;
 half _PushRadius;
 half _PushIntensity;
+
+// custom shadow bias
+half2 _CustomShadowBias;
+half _MainLightShadowSoftScale;
+
 CBUFFER_END
 
 // ========================= global vars

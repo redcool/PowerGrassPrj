@@ -2,13 +2,11 @@
 #define SHADOW_CASTER_PASS_CGINC
 
 #include "PowerGrassInput.cginc"
+#include "URP_MainLightShadows.hlsl"
 
-struct appdata{
-    half4 vertex:POSITION;
-    half2 uv:TEXCOORD;
-    half3 color:COLOR;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
-};
+half3 _LightDirection;
+
+
 
 struct shadowPass_v2f {
     V2F_SHADOW_CASTER;
@@ -17,16 +15,23 @@ struct shadowPass_v2f {
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-shadowPass_v2f shadowPass_vert(appdata v)
+shadowPass_v2f shadowPass_vert(appdata_full v)
 {
     shadowPass_v2f o = (shadowPass_v2f)0;
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_TRANSFER_INSTANCE_ID(v, o);
     
     half4 worldPos = mul(unity_ObjectToWorld,v.vertex);
-    half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.uv,v.color);
-    o.pos = UnityWorldToClipPos(half4(worldPosNoise.xyz,1));
-    o.uv = v.uv;
+    half4 worldPosNoise = WaveVertex(worldPos,v.vertex,v.texcoord,v.color);
+    half3 worldNormal = UnityObjectToWorldNormal(v.normal);
+    o.pos = UnityWorldToClipPos(ApplyShadowBias(worldPosNoise.xyz,worldNormal,_LightDirection));
+    #if UNITY_REVERSED_Z
+        o.pos.z = min(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+    #else
+        o.pos.z = max(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+    #endif
+
+    o.uv = v.texcoord;
     o.worldPosNoise = worldPosNoise;
     return o;
 }

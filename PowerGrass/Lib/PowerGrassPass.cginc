@@ -3,6 +3,11 @@
 #if !defined(POWER_GRASS_PASS_CGINC)
 #define POWER_GRASS_PASS_CGINC
 
+#if defined(URP_SHADOW)
+    
+    #include "URP_MainLightShadows.hlsl"
+#endif
+
 struct appdata
 {
     half4 vertex : POSITION;
@@ -19,7 +24,8 @@ struct v2f
     half4 uvLightmapUV : TEXCOORD0;
     UNITY_FOG_COORDS(1)
     half4 pos : SV_POSITION;
-    SHADOW_COORDS(2)
+    // SHADOW_COORDS(2)
+    half4 _ShadowCoord:TEXCOORD2;
     half3 diff:TEXCOORD3;
     half4 vertexLightNoise:TEXCOORD4;
     half4 worldPos:TEXCOORD5;
@@ -51,7 +57,11 @@ v2f vert (appdata v)
         o.uvLightmapUV.zw = v.uv1.xy * unity_LightmapST.xy + unity_LightmapST.zw;
     #endif
 
-    TRANSFER_SHADOW(o)
+    #if defined(URP_SHADOW)
+        o._ShadowCoord = TransformWorldToShadowCoord(o.worldPos.xyz);
+    #else
+        TRANSFER_SHADOW(o)
+    #endif
     UNITY_TRANSFER_FOG(o,o.pos);
 
     half3 normal = (UnityObjectToWorldNormal(v.normal));
@@ -96,6 +106,10 @@ half4 frag (v2f i) : SV_Target
     // shadow atten
     #if defined (SHADOWS_SCREEN)
         half atten = SHADOW_ATTENUATION(i);
+        half attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
+        col.rgb *= i.diff * attenColor + sh;
+    #elif defined(URP_SHADOW)
+        half atten = CalcShadow(i._ShadowCoord,worldPos);
         half attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
         col.rgb *= i.diff * attenColor + sh;
     #else
