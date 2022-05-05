@@ -16,7 +16,7 @@ MonoBehaviour:
   enableLightmap: 0
   destroyGameObjectWhenCannotUse: 1
   culledUnderLevel2: 1
-  culledRatio: 0
+  culledRatio: 0.206
   forceRefresh: 0
   groupList:
   - mesh: {fileID: -7002830064322448097, guid: fbfa92baff35fea46b9c6a1a798c2199, type: 3}

@@ -4,7 +4,7 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Color("Color",color) = (1,1,1,1)
-        _ColorScale("ColorScale",range(0,3)) = 1
+        _ColorScale("ColorScale",range(0,5)) = 1
         _BaseAO("Base Ao",range(0,2)) = 1
 
         [Header(Clip)]
@@ -91,7 +91,7 @@
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
-            //#pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile_fwdbase 
             #pragma multi_compile_instancing
             #pragma shader_feature_local_fragment ALPHA_TEST

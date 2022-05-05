@@ -52,9 +52,7 @@ v2f vert (appdata v)
     o.vertexLightNoise.w = saturate(worldPosNoise.w);
 
     #if defined(LIGHTMAP_ON)
-        // half4 lightmapST = UNITY_ACCESS_INSTANCED_PROP(Props,_LightmapST);
-        // lightmapST = length(lightmapST) ==0? unity_LightmapST : lightmapST;
-        o.uvLightmapUV.zw = v.uv1.xy * unity_LightmapST.xy + unity_LightmapST.zw;
+        o.uvLightmapUV.zw = v.uv1.xy * _LightmapST.xy + _LightmapST.zw;
     #endif
 
     #if defined(URP_SHADOW)
@@ -78,7 +76,7 @@ v2f vert (appdata v)
     o.diff = (nl * _ColorScale) * _LightColor0.rgb;
     o.diff *= _Color * lerp(_WaveColor1,_WaveColor2,worldPosNoise.w);
 
-    o.vertexLightNoise.xyz = ShadeSH9(half4(normal,1));
+    o.vertexLightNoise.xyz = dot(lightDir,normal) * 0.5 + 0.5;// ShadeSH9(half4(normal,1));
     return o;
 }
 
@@ -120,6 +118,7 @@ half4 frag (v2f i) : SV_Target
     #if defined(LIGHTMAP_ON)
         half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.uvLightmapUV.zw);
         half3 bakedColor = DecodeLightmap(bakedColorTex);
+        return bakedColor.xyzx;
         col.rgb *= bakedColor;
     #endif
 
