@@ -5,22 +5,21 @@
         _MainTex ("Texture", 2D) = "white" {}
         _Color("Color",color) = (1,1,1,1)
         _ColorScale("ColorScale",range(0,5)) = 1
-        _BaseAO("Base Ao",range(0,2)) = 1
 
         [Header(Clip)]
         [Toggle(ALPHA_TEST)]_CutoffOn("_CutoffOn",float) = 0
         _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
 
-        [Header(Clip Animation)]
-        [Toggle(CULL_ANIM)]_CullAnimOn("_CullAnimOn",float) = 0
+        [Header(Distance Culling)]
+        [Toggle(DISTANCE_CULLING)]_DistanceCullingOn("_DistanceCullingOn",float) = 0
         _CullPos("_CullPos",vector) = (0,0,0,0)
         _CullDistance("_CullDistance",float) = 5
         [Toggle]_CullInvert("_CullInvert",float) = 0 
 
         [Header(Wind)]
-        _WaveSpeed("WaveSpeed",float) = 1
-        _WaveIntensity("WaveIntensity",float) = 1
-        _WaveScale("_WaveScale",float) = 1
+        _WaveSpeed("WaveSpeed",float) = 4
+        _WaveIntensity("WaveIntensity",float) = 2
+        _WaveScale("_WaveScale",float) = 10
 
         [Header(WaveColor)]
         [hdr]_WaveColor1("_WaveColor1",color) = (1,1,1,1)

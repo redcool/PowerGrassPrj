@@ -25,9 +25,7 @@ half CalcNoise(half3 pos,half2 vertexUV,half3 vertexColor,half3 vertexPos){
     half2 timeOffset = _Time.y * _WaveSpeed;
     half2 noiseUV = pos.xz + timeOffset;
 
-    half noise = 0;
-    Unity_GradientNoise_half(noiseUV,_WaveScale*0.01,noise);
-    noise -= 0.5;
+    half noise = unity_gradientNoise(noiseUV * _WaveScale*0.01);
 
     half yAtten = smoothstep(0.,0.5,vertexPos.y);
     half uvY = smoothstep(0,0.5,vertexUV.y);

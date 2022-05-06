@@ -10,7 +10,6 @@ CBUFFER_START(UnityPerMaterial)
 half4 _MainTex_ST;
 half _Cutoff;
 half _ColorScale;
-half _BaseAO;
 half _Metallic,_Smoothness;
 // wind
 half _WaveIntensity;
@@ -35,7 +34,7 @@ half3 _PlayerPos;
 half3 _GlobalWindDir;
 half _GlobalWindIntensity;
 
-half _CullAnimOn;
+half _DistanceCullingOn;
 half3 _CullPos;
 half _CullDistance;
 half _CullInvert;

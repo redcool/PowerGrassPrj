@@ -76,7 +76,7 @@ v2f vert (appdata v)
     o.diff = (nl * _ColorScale) * _LightColor0.rgb;
     o.diff *= _Color * lerp(_WaveColor1,_WaveColor2,worldPosNoise.w);
 
-    o.vertexLightNoise.xyz = dot(lightDir,normal) * 0.5 + 0.5;// ShadeSH9(half4(normal,1));
+    o.vertexLightNoise.xyz = ShadeSH9(half4(normal,1));
     return o;
 }
 
@@ -95,7 +95,7 @@ half4 frag (v2f i) : SV_Target
     #if defined(ALPHA_TEST)
         half alphaCull = col.a - _Cutoff;
         half cullDistance = 0;
-        if(_CullAnimOn)
+        if(_DistanceCullingOn)
             cullDistance = CalcCullDistance(worldPos);
 
         clip( min(alphaCull,cullDistance));
@@ -104,12 +104,10 @@ half4 frag (v2f i) : SV_Target
     // shadow atten
     #if defined (SHADOWS_SCREEN)
         half atten = SHADOW_ATTENUATION(i);
-        half attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
-        col.rgb *= i.diff * attenColor + sh;
+        col.rgb *= i.diff * atten + sh;
     #elif defined(URP_SHADOW)
         half atten = CalcShadow(i._ShadowCoord,worldPos);
-        half attenColor = lerp(UNITY_LIGHTMODEL_AMBIENT * _BaseAO,1,atten);
-        col.rgb *= i.diff * attenColor + sh;
+        col.rgb *= i.diff * atten + sh;
     #else
         col.rgb *= i.diff+sh;
     #endif
@@ -118,7 +116,6 @@ half4 frag (v2f i) : SV_Target
     #if defined(LIGHTMAP_ON)
         half4 bakedColorTex = UNITY_SAMPLE_TEX2D(unity_Lightmap, i.uvLightmapUV.zw);
         half3 bakedColor = DecodeLightmap(bakedColorTex);
-        return bakedColor.xyzx;
         col.rgb *= bakedColor;
     #endif
 

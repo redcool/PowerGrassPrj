@@ -68,7 +68,7 @@ Material:
     - _BumpScale: 1
     - _ColorScale: 4.59
     - _CullAnim: 1
-    - _CullAnimOn: 0
+    - _DistanceCullingOn: 0
     - _CullDistance: 100
     - _CullInvert: 1
     - _Cutoff: 0.49

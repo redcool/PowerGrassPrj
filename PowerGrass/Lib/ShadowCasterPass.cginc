@@ -43,7 +43,7 @@ half4 shadowPass_frag(shadowPass_v2f i) : SV_Target
         half4 col = tex2D(_MainTex, i.uv);
         half alphaCull = col.a - _Cutoff;
         half cullDistance = 0;
-        if(_CullAnimOn)
+        if(_DistanceCullingOn)
             cullDistance = CalcCullDistance(i.worldPosNoise.xyz);
             
         clip( min(alphaCull,cullDistance));
