@@ -13,182 +13,25 @@ MonoBehaviour:
   m_Name: GrassGroup
   m_EditorClassIdentifier: 
   lightmaps: []
+  shadowMasks: []
   enableLightmap: 1
-  destroyGameObjectsWhenBaked: 1
+  isSubstractiveMode: 0
+  lightmapArray: {fileID: 0}
+  isEnableLightmapArray: 0
+  layers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  includeInactive: 0
+  excludeTag: EditorOnly
+  groupMinCount: 30
+  disableChildren: 1
   culledRatio: 0.5
-  forceRefresh: 0
-  groupList:
-  - mesh: {fileID: -7002830064322448097, guid: fbfa92baff35fea46b9c6a1a798c2199, type: 3}
-    mat: {fileID: 2100000, guid: 7143dbda992afbc4e9ca9a15e8cfd017, type: 2}
-    originalTransformsGroupList:
-    - transforms:
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 5.83
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 3.96
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 1.23
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 1.1
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 2.4
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 2.6
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 4.7
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 2.24
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 7.38
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0.21
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 1.41
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-    displayTransformsGroupList:
-    - transforms:
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 5.83
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 3.96
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 1.23
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 1.1
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 2.4
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 2.6
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 4.7
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 2.24
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-      - e00: 1
-        e01: 0
-        e02: 0
-        e03: 7.38
-        e10: 0
-        e11: -0.00000011920929
-        e12: 1.0000001
-        e13: 0.21
-        e20: 0
-        e21: -1.0000001
-        e22: -0.00000011920929
-        e23: 1.41
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-    lightmapCoordsList:
-    - lightmapCoords:
-      - {x: 1, y: 1, z: 0, w: 0}
-      - {x: 1, y: 1, z: 0, w: 0}
-      - {x: 1, y: 1, z: 0, w: 0}
-      - {x: 1, y: 1, z: 0, w: 0}
-      - {x: 1, y: 1, z: 0, w: 0}
-    lightmapId: -1
+  forceRefresh: 1
+  layer: 0
+  receiveShadow: 1
+  camera: {fileID: 0}
+  shadowCastMode: 0
+  lightProbeUsage: 1
+  groupList: []
+  renders: []
+  drawChildrenId: 0
