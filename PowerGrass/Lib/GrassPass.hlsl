@@ -59,7 +59,7 @@ v2f vert (appdata v)
     float metallic,smoothness,occlusion;
     SplitPbrMaskTexture(metallic/**/,smoothness/**/,occlusion/**/,pbrMaskTex,int3(0,1,2),half3(_Metallic,_Smoothness,_Occlusion));
 
-    float3 normal = (UnityObjectToWorldNormal(v.normal));
+    float3 normal = normalize(UnityObjectToWorldNormal(v.normal));
     // float3 tangent = 0;//UnityObjectToWorldDir(v.tangent.xyz);
     // float3 binormal = 0;//cross(normal,tangent) * v.tangent.w;
     // o.tSpace0 = float4(tangent.x,binormal.x,normal.x,worldPosNoise.x);
